@@ -1,0 +1,8 @@
+{
+  "name": "clang-format-action",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:WhoMeNope/clang-format-action.git",
+  "author": "Martin Toman <whomenope@outlook.com>",
+  "license": "GPLv3"
+}
