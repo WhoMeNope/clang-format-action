@@ -1,0 +1,12 @@
+name: 'clang-format-action'
+description: 'Keeps your repo tidy using clang-format.'
+
+inputs:
+  config-path:
+    description: 'Path to `.clang-format` style configuration file'
+    required: true
+    default: '.clang-format'
+
+runs:
+  using: 'node12'
+  main: 'index.js'
