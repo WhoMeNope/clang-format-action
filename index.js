@@ -9,16 +9,12 @@ async function run () {
   const config_path = core.getInput('config-path')
   console.log(`Using config at '${config_path}'`)
 
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`)
-
   // Get authenticated API
   const repoToken = core.getInput('repo-token');
   const octokit = new github.GitHub(repoToken);
 
   // Get PR details
-  const {context} = octokit
+  const context = github.context
   const {owner, repo} = context.repo
   const {number} = context.payload
   const {sha, ref} = context.payload.pull_request.head
