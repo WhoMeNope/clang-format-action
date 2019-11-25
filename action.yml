@@ -8,5 +8,5 @@ inputs:
     default: '.clang-format'
 
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: 'docker'
+  image: 'Dockerfile'
