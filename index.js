@@ -19,8 +19,9 @@ async function run () {
 
   // Get PR details
   const {context} = github
-  const {owner, repo, number} = context.issue()
-  const {sha, ref} = context.payload.pull_request.head
+  const {owner, repo} = context.repo
+  const {number} = context.payload
+  const {sha, ref} = context.head
 
   // Setup PR status check
   const status = Status(github.checks, {
