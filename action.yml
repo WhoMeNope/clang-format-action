@@ -2,9 +2,12 @@ name: 'clang-format-action'
 description: 'Keeps your repo tidy using clang-format.'
 
 inputs:
+  repo-token:
+    description: 'GITHUB_TOKEN used for interacting with the repo'
+    required: true
   config-path:
     description: 'Path to `.clang-format` style configuration file'
-    required: true
+    required: false
     default: '.clang-format'
 
 runs:
