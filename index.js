@@ -2,7 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 
 const Status = require('./lib/status')
-const { format, lint } = require('./lib/actions')
+const {lint} = require('./lib/actions')
 
 async function run () {
   // Get clang-format config path
@@ -14,17 +14,17 @@ async function run () {
   console.log(`The event payload: ${payload}`)
 
   // Get authenticated API
-  const myToken = core.getInput('repo-token');
-  const octokit = new github.GitHub(myToken);
+  const repoToken = core.getInput('repo-token');
+  const octokit = new github.GitHub(repoToken);
 
   // Get PR details
-  const {context} = github
+  const {context} = octokit
   const {owner, repo} = context.repo
   const {number} = context.payload
-  const {sha, ref} = context.head
+  const {sha, ref} = context.payload.pull_request.head
 
   // Setup PR status check
-  const status = Status(github.checks, {
+  const status = Status(octokit.checks, {
       owner,
       repo,
       name: 'clang-format',
@@ -42,10 +42,5 @@ async function run () {
   }
 }
 
-// run action
-try {
-  run()
-}
-catch (error) {
-  core.setFailed(error.message)
-}
+// Run action
+run().catch((error) => core.setFailed(error.message))
