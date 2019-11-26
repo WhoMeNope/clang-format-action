@@ -10,13 +10,13 @@ async function run () {
   console.log(`Using config at '${config_path}'`)
 
   // Get authenticated API
-  const repoToken = core.getInput('repo-token');
-  const octokit = new github.GitHub(repoToken);
+  const repoToken = core.getInput('repo-token')
+  const octokit = new github.GitHub(repoToken)
 
   // Get PR details
   const context = github.context
   const {owner, repo} = context.repo
-  const {number} = context.payload
+  const {number: pull_number} = context.payload
   const {sha, ref} = context.payload.pull_request.head
 
   // Setup PR status check
@@ -30,11 +30,10 @@ async function run () {
 
   // Lint
   try {
-    await lint({ owner, repo, pull_number: number, sha, ref }, github, status)
+    await lint({ owner, repo, pull_number, sha, ref }, octokit, status)
   }
   catch (error) {
     status.error(error)
-    throw error
   }
 }
 
