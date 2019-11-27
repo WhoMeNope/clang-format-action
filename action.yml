@@ -1,5 +1,8 @@
 name: 'clang-format-action'
 description: 'Keeps your repo tidy using clang-format.'
+branding:
+  color: 'blue'
+  icon: 'check'
 
 inputs:
   repo-token:
