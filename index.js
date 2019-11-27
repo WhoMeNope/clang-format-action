@@ -2,7 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 
 const Status = require('./lib/status')
-const {lint} = require('./lib/actions')
+const {lint, format} = require('./lib/actions')
 
 async function run () {
   // Get clang-format config path
@@ -12,6 +12,11 @@ async function run () {
   // Get authenticated API
   const repoToken = core.getInput('repo-token')
   const octokit = new github.GitHub(repoToken)
+
+  // Check permissions
+  const proactive = process.env.TAKE_ACTION ? process.env.TAKE_ACTION : false
+
+  proactive && console.log(`${JSON.stringify(github.context.payload)}`)
 
   // Get PR details
   const context = github.context
@@ -28,9 +33,16 @@ async function run () {
     })
   await status.queued()
 
-  // Lint
+  // Run
   try {
-    await lint({ owner, repo, pull_number, sha, ref }, octokit, status)
+    const details = { owner, repo, pull_number, sha, ref }
+
+    if (!proactive) {
+      await lint(details, octokit, status)
+    }
+    else {
+      await format(details, octokit, status)
+    }
   }
   catch (error) {
     status.error(error)
