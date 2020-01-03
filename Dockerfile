@@ -2,7 +2,8 @@ FROM node:lts-buster
 
 # install dependencies
 RUN apt update -y && apt install -y \
-  clang-format
+  clang-format \
+  git
 
 WORKDIR /action
 
