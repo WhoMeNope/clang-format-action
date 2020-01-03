@@ -21,16 +21,22 @@ async function run () {
   // Get PR details
   const context = github.context
   const {owner, repo} = context.repo
-  const {number: pull_number} = context.payload
-  const {sha, ref} = context.payload.pull_request.head
+  const {number: pull_number} = context.payload.issue || context.payload
+
+  const pr = await octokit.pulls.get({
+    owner,
+    repo,
+    pull_number,
+  })
+  const {sha, ref} = pr.data.head
 
   // Setup PR status check
   const status = Status(octokit.checks, {
-      owner,
-      repo,
-      name: 'clang-format',
-      head_sha: sha,
-    })
+    owner,
+    repo,
+    name: 'clang-format',
+    head_sha: sha,
+  })
   await status.queued()
 
   // Run
